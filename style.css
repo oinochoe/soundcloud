@@ -1,0 +1,336 @@
+*{list-style: none}
+.sound_cloud_player {
+    display: none;
+    padding-top: 33px
+}
+
+.sound_cloud_player.on {
+    display: block
+}
+
+.feature_music {
+    overflow: hidden;
+    position: relative;
+    width: 848px;
+    height: 598px;
+    border: 1px solid #e6e6e6
+}
+
+.feature_music .bg_album {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1
+}
+
+.feature_music.tab1 .bg_album {
+    background-image: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/bg_balenos.jpg)
+}
+
+.feature_music.tab2 .bg_album {
+    background-image: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/bg_serendia.jpg)
+}
+
+.feature_music.tab3 .bg_album {
+    background-image: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/bg_calpheon.jpg);
+}
+
+.feature_music .logo_sc {
+    position: absolute;
+    left: 17px;
+    top: 17px;
+    width: 104px;
+    height: 26px;
+    z-index: 2
+}
+
+.feature_music .logo_sc img {
+    width: 100%;
+    height: auto
+}
+
+.feature_music .sc_music_player {
+    position: absolute;
+    left: 0;
+    top: -200px
+}
+
+.side_playlist {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 285px;
+    height: 100%;
+    padding: 19px 17px 60px 18px;
+    background-color: #000;
+    background-color: rgba(0,0,0,.62);
+    box-sizing: border-box
+}
+
+.tab_playlist {
+    overflow: hidden;
+    padding: 1px 0 0 1px
+}
+
+.tab_playlist li {
+    float: left;
+    margin: -1px 0 0 -1px
+}
+
+.tab_playlist .link_tab {
+    float: left;
+    width: 83px;
+    height: 38px;
+    padding-top: 9px;
+    border: 1px solid #fff;
+    border: 1px solid rgba(255,255,255,.2);
+    font-size: 13px;
+    line-height: 15px;
+    color: #f5f5f5;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none
+}
+
+.tab_playlist .link_tab:hover {
+    color: #ffc741
+}
+
+.tab_playlist .link_tab[aria-selected="true"] {
+    position: relative;
+    z-index: 10;
+    color: #ffc741;
+    border-color: #ffc741
+}
+
+.group_playlist {
+    display: none
+}
+
+.group_playlist.on {
+    display: block
+}
+
+.group_playlist .tit_playlist {
+    display: block;
+    height: 54px;
+    padding-top: 24px;
+    border-bottom: 1px solid #d3d2d2;
+    border-bottom: 1px solid rgba(211,210,210,.3);
+    font-size: 14px;
+    line-height: 16px;
+    color: #fff;
+    text-indent: 5px;
+    box-sizing: border-box
+}
+
+.list_playlist {
+    padding: 7px 0 0 5px
+}
+
+.list_playlist .on .link_txt,.list_playlist .link_txt:hover {
+    font-weight: bold;
+    color: #ffc741
+}
+
+.list_playlist .link_txt {
+    display: inline-block;
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 13px;
+    line-height: 25px;
+    color: #f5f5f5;
+    text-decoration: none;
+    letter-spacing: -0.025em;
+    vertical-align: top;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer
+}
+
+.side_playlist {
+    z-index: 2
+}
+
+.side_playlist .group_btn {
+    position: absolute;
+    bottom: 25px;
+    left: 22px;
+    right: 22px
+}
+
+.ico_fansitekit {
+    display: block;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/ico_fansitekit.png) 0 0 no-repeat;
+    text-indent: -9999px
+}
+
+.group_btn {
+    overflow: hidden
+}
+
+.group_btn .ico_fansitekit {
+    width: 28px;
+    height: 28px
+}
+
+.group_btn .ico_fansitekit.on {
+    background-position-y: -30px
+}
+
+.group_btn .link_play {
+    float: left;
+    background-position: 0 0
+}
+
+.group_btn .link_pause {
+    float: left;
+    margin-left: 8px;
+    background-position: -30px 0
+}
+
+.group_btn .link_volume {
+    float: right;
+    background-position: -60px 0
+}
+
+.info_play {
+    position: absolute;
+    bottom: 17px;
+    left: 17px;
+    width: 546px;
+    box-sizing: border-box;
+    z-index: 2
+}
+
+.info_play:after {
+    display: block;
+    clear: both;
+    content: ''
+}
+
+.info_play .wrap_thumb {
+    float: left;
+    position: relative;
+    width: 80px;
+    height: 80px
+}
+
+.info_play .wrap_thumb .thumb,.info_play .wrap_thumb .loading {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%
+}
+
+.info_play .wrap_thumb .thumb img,.info_play .wrap_thumb .loading img {
+    width: 100%;
+    height: auto
+}
+
+.info_play .wrap_thumb .thumb {
+    z-index: 1
+}
+
+.info_play .wrap_thumb .thumb span {
+    display: none;
+    width: 100%;
+    height: 100%
+}
+
+.info_play .wrap_thumb .thumb span.on {
+    display: block
+}
+
+.info_play .wrap_thumb .thumb span.balenos {
+    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/thumb_balenos.jpg) no-repeat
+}
+
+.info_play .wrap_thumb .thumb span.serendia {
+    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/thumb_serendia.jpg) no-repeat
+}
+
+.info_play .wrap_thumb .thumb span.calpheon {
+    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/thumb_calpheon.jpg) no-repeat
+}
+
+.info_play .wrap_thumb .loading {
+    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/img-loading.gif) no-repeat;
+    z-index: 0
+}
+
+.sound_cloud_player.loading .info_play .player.loading .cover_image .cover {
+    z-index: 0
+}
+
+.sound_cloud_player.loading .info_play .wrap_thumb .loading {
+    z-index: 1
+}
+
+.info_play .cont_thumb {
+    overflow: hidden;
+    padding-left: 19px
+}
+
+.info_play .tit_thumb {
+    display: block;
+    padding-top: 8px;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 18px;
+    color: #fff
+}
+
+.info_play .desc_thumb {
+    padding-top: 5px;
+    font-size: 14px;
+    color: #ffc741
+}
+
+.info_play .slider_music {
+    position: absolute;
+    bottom: -4px;
+    left: 98px;
+    right: 0;
+    padding-right: 54px
+}
+
+.info_play .bar_container {
+    position: relative;
+    padding: 5px 0;
+    cursor: pointer
+}
+
+.info_play .inner_container {
+    height: 2px;
+    background-color: #8c8c8c
+}
+
+.info_play .bar_progress {
+    height: 100%;
+    background-color: #ffc741
+}
+
+.info_play .control_bar {
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    background-position: -90px 0
+}
+
+.info_play .txt_playtime {
+    position: absolute;
+    right: 18px;
+    bottom: 2px;
+    font-size: 13px;
+    line-height: 15px;
+    color: #d3d3d3
+}
