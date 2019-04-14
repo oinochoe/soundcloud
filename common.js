@@ -1,6 +1,97 @@
-$(document).ready(function() {
-    var c = SC.Widget($(".sc_music_player")[0]);
-    var k = {
+'use strict';
+$(document).ready(function () {
+    // Setting
+    function set(event, target) { 
+        function set(flags) {
+            tick(flags);
+            init(flags);
+        }
+        // Offset Initial Setting
+        var $offset = event.clientX - target.offset().left;
+        var $rangeWidth = parseInt($offset / target.width() * 100);
+        if ($rangeWidth < 0) {
+            set(0);
+        } else {
+            if ($rangeWidth > 100) {
+                set(100);
+            } else {
+                set($rangeWidth);
+            }
+        }
+    }
+    // Init Scroll position and player Seeking to that position's playing
+    function init(scrollNum) {
+        scPlayer.getDuration(function ($makeWidth) {
+            var $scrollAmount = Math.floor($makeWidth * (scrollNum / 100));
+            scPlayer.seekTo($scrollAmount);
+        });
+    }
+    // Progress Tick setting
+    function tick(tickWidth) {
+        var $tick = $(".scInfo .scBar .scProgress");
+        var $tickController = $(".scInfo .scBar .scplaycontrol");
+        $tick.width(tickWidth + "%");
+        $tickController.css("left", tickWidth + "%");
+    }
+    // Thumbnail setting
+    function thumb(data) {
+        var $sc = $(".scPlayer");
+        var $scThumbElement = $sc.find(".scInfo .scThumb .thumb");
+        var $titleField = $sc.find(".scInfo .scThumbCont .scThumbDesc");
+        var $playTime = $sc.find(".scInfo .scPlaytime");
+        tick(0);
+        $sc.addClass("loading");
+        $scThumbElement.find("span").removeClass("on");
+        $scThumbElement.find("." + data.album).addClass("on");
+        $titleField.text(data.title);
+        $playTime.text(data.duration);
+        $(".scGroupBtn [data-volume]").addClass("on");
+    }
+    // ActivePlayer
+    function activePlayer(id, active) {
+        var $idxToMakeActive = id.parent().index();
+        $(active).removeClass("on");
+        $(active).eq($idxToMakeActive).addClass("on");
+    }
+    // OtherPlayer Class setting
+    function otherPlayer(other) {
+        var $idxToMakeOther = other.parent().index();
+        var $classesLine = "scplayMusic tab" + ($idxToMakeOther + 1);
+        $(".scplayMusic").attr("class", $classesLine);
+    }
+    // UpdatePlayer Sound
+    function updatePlayer(event) {
+        var $dataReceived = $(event.target);
+        scPlayer.getVolume(function (vols) {
+            var volumes = vols;
+            if (volumes > 0) {
+                scPlayer.setVolume(0);
+                $dataReceived.removeClass("on").text("?? off");
+            } else {
+                scPlayer.setVolume(100);
+                $dataReceived.addClass("on").text("?? on");
+            }
+        });
+        event.preventDefault();
+    }
+    // Play Start
+    function start(event) {
+        var $state = $(event.target).data("scplaycontrol");
+        scPlayer.isPaused(function (table) {
+            var $that = table;
+            if ($that && $state == "play") {
+                scPlayer.play();
+            } else {
+                if (!$that && $state == "pause") {
+                    scPlayer.pause();
+                }
+            }
+        });
+        event.preventDefault();
+    }
+    // Declare scPlayer variable
+    var scPlayer = SC.Widget($(".scMusicPlayer")[0]);
+    var json = {
         auto_play: true,
         buying: false,
         sharing: false,
@@ -11,186 +102,106 @@ $(document).ready(function() {
         single_active: false,
         start_track: 0
     };
-    var b = (function() {
-        var n = {};
-        var o = $(".sound_cloud_player .group_playlist li");
-        o.each(function(p, q) {
-            var r = $(q).find("a");
-            if (!n[r.data("album")]) {
-                n[r.data("album")] = []
+    // Indexing Cache and 
+    var indexCache = function () {
+        var $allAttachPoints = {};
+        var $playerList = $(".scPlayer .scPlayList li");
+        $playerList.each(function (p, albumTarget) {
+            var $albumControl = $(albumTarget).find("a");
+            if (!$allAttachPoints[$albumControl.data("album")]) {
+                $allAttachPoints[$albumControl.data("album")] = [];
             }
-            n[r.data("album")].push({
-                title: r.text(),
-                duration: r.data("duration"),
-                album: r.data("album"),
-                url: r.data("url")
-            })
-        });
-        return n
-    }
-    )();
-    function i(q, n) {
-        var o = (q.clientX - n.offset().left);
-        var r = parseInt(o / n.width() * 100);
-        if (r < 0) {
-            p(0)
-        } else {
-            if (r > 100) {
-                p(100)
-            } else {
-                p(r)
-            }
-        }
-        function p(s) {
-            d(s);
-            e(s)
-        }
-    }
-    function e(n) {
-        c.getDuration(function(p) {
-            var o = Math.floor(p * (n / 100));
-            c.seekTo(o)
-        })
-    }
-    function d(p) {
-        var n = $(".info_play .bar_container .bar_progress");
-        var o = $(".info_play .bar_container .control_bar");
-        n.width(p + "%");
-        o.css("left", p + "%")
-    }
-    function h(n) {
-        var p = $(".sound_cloud_player");
-        var q = p.find(".info_play .wrap_thumb .thumb");
-        var o = p.find(".info_play .cont_thumb .desc_thumb");
-        var r = p.find(".info_play .txt_playtime");
-        d(0);
-        p.addClass("loading");
-        q.find("span").removeClass("on");
-        q.find("." + n.album).addClass("on");
-        o.text(n.title);
-        r.text(n.duration);
-        $(".group_btn [data-volume]").addClass("on")
-    }
-    function l(o, n) {
-        var p = o.parent().index();
-        $(n).removeClass("on");
-        $(n).eq(p).addClass("on")
-    }
-    function f(p) {
-        var n = p.parent().index();
-        var o = "feature_music tab" + (n + 1);
-        $(".feature_music").attr("class", o)
-    }
-    function m(o) {
-        var n = $(o.target);
-        c.getVolume(function(q) {
-            var p = q;
-            if (p > 0) {
-                c.setVolume(0);
-                n.removeClass("on").text("볼륨 off")
-            } else {
-                c.setVolume(100);
-                n.addClass("on").text("볼륨 on")
-            }
-        });
-        o.preventDefault()
-    }
-    function g(o) {
-        var n = $(o.target).data("playctrl");
-        c.isPaused(function(q) {
-            var p = q;
-            if (p && n == "play") {
-                c.play()
-            } else {
-                if (!p && n == "pause") {
-                    c.pause()
-                }
-            }
-        });
-        o.preventDefault()
-    }
-    $(".info_play .bar_container").on({
-        mousedown: function(o) {
-            var n = $(this);
-            i(o, n);
-            n.addClass("hold");
-            n.on("mousemove", function(p) {
-                i(p, n);
-                p.preventDefault()
+            $allAttachPoints[$albumControl.data("album")].push({
+                title: $albumControl.text(),
+                duration: $albumControl.data("duration"),
+                album: $albumControl.data("album"),
+                url: $albumControl.data("url")
             });
-            o.preventDefault()
+        });
+        return $allAttachPoints;
+    }();
+    $(".scInfo .scBar").on({
+        mousedown: function (event) {
+            var $that = $(this);
+            set(event, $that);
+            $that.addClass("hold");
+            $that.on("mousemove", function (event) {
+                set(event, $that);
+                event.preventDefault();
+            });
+            event.preventDefault();
         },
-        mouseup: function(o) {
-            var n = $(this);
-            n.removeClass("hold");
-            n.off("mousemove");
-            o.preventDefault()
+        mouseup: function (event) {
+            var $that = $(this);
+            $that.removeClass("hold");
+            $that.off("mousemove");
+            event.preventDefault();
         },
-        mouseleave: function(o) {
-            var n = $(this);
-            n.removeClass("hold");
-            n.off("mousemove");
-            o.preventDefault()
+        mouseleave: function (event) {
+            var $that = $(this);
+            $that.removeClass("hold");
+            $that.off("mousemove");
+            event.preventDefault();
         }
     });
-    var j = $("#fansiteTab");
-    j.find(".link_tab").on("click", function(o) {
-        var n = $(this);
-        j.find("li").removeClass("on").find(".link_tab").attr("aria-selected", "false");
-        n.parent().addClass("on").find(".link_tab").attr("aria-selected", "true");
-        l(n, "[data-fansitekit]");
-        o.preventDefault()
+    var $link = $("#fansiteTab");
+    $link.find(".scLink").on("click", function (event) {
+        var id = $(this);
+        $link.find("li").removeClass("on").find(".scLink").attr("aria-selected", "false");
+        id.parent().addClass("on").find(".scLink").attr("aria-selected", "true");
+        activePlayer(id, "[data-fansitekit]");
+        event.preventDefault();
     });
-    $(".tab_playlist").on("click", ".link_tab", function(o) {
-        var n = $(this);
-        $(".tab_playlist .link_tab").attr("aria-selected", "false");
-        n.attr("aria-selected", "true");
-        l(n, ".group_playlist");
-        f(n);
-        o.preventDefault()
+    $(".scPlayListTab").on("click", ".scLink", function (event) {
+        var item = $(this);
+        $(".scPlayListTab .scLink").attr("aria-selected", "false");
+        item.attr("aria-selected", "true");
+        activePlayer(item, ".scPlayList");
+        otherPlayer(item);
+        event.preventDefault();
     });
-    $("[data-playCtrl]").click(g);
-    $(".group_btn [data-volume]").click(m);
-    $(".group_playlist li").find("a.link_txt").on("click", function(t) {
-        var s = $(".sound_cloud_player");
-        var o = $(".sound_cloud_player .group_playlist li");
-        var q = $(this).parent("li");
-        var n = parseInt(q.index());
-        var p = b[$(this).data("album")][n];
-        var r = !s.hasClass("loading") && !q.hasClass("on");
-        if (r) {
-            c.pause();
-            c.load(p.url, k);
-            h(p);
-            o.removeClass("on");
-            q.addClass("on")
+    $("[data-scplaycontrol]").click(start);
+    $(".scGroupBtn [data-volume]").click(updatePlayer);
+    $(".scPlayList li").find("a.scLinkTxt").on("click", function (event) {
+        var $btn = $(".scPlayer");
+        var $dataReceived = $(".scPlayer .scPlayList li");
+        var prev = $(this).parent("li");
+        var id = parseInt(prev.index());
+        var entry = indexCache[$(this).data("album")][id];
+        var $reload = !$btn.hasClass("loading") && !prev.hasClass("on");
+        if ($reload) {
+            scPlayer.pause();
+            scPlayer.load(entry.url, json);
+            thumb(entry);
+            $dataReceived.removeClass("on");
+            prev.addClass("on");
         }
-        t.preventDefault()
+        event.preventDefault();
     });
-    c.bind(SC.Widget.Events.READY, function() {
-        h(b.balenos[0]);
-        $(".sound_cloud_player").removeClass("loading")
+    scPlayer.bind(SC.Widget.Events.READY, function () {
+        thumb(indexCache.balenos[0]);
+        $(".scPlayer").removeClass("loading");
     });
-    c.bind(SC.Widget.Events.PLAY, function(n) {
-        setTimeout(function() {
-            $(".sound_cloud_player").removeClass("loading")
+    scPlayer.bind(SC.Widget.Events.PLAY, function (n) {
+        setTimeout(function () {
+            $(".scPlayer").removeClass("loading");
         }, 1000);
-        $("[data-playCtrl=play]").addClass("on");
-        $("[data-playCtrl=pause]").removeClass("on")
+        $("[data-scplaycontrol=play]").addClass("on");
+        $("[data-scplaycontrol=pause]").removeClass("on");
     });
-    c.bind(SC.Widget.Events.PAUSE, function(n) {
-        $("[data-playCtrl=play]").removeClass("on");
-        $("[data-playCtrl=pause]").addClass("on")
+    scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
+        $("[data-scplaycontrol=play]").removeClass("on");
+        $("[data-scplaycontrol=pause]").addClass("on");
     });
-    c.bind(SC.Widget.Events.FINISH, function(n) {
-        $("[data-playCtrl=play]").removeClass("on");
-        $("[data-playCtrl=pause]").removeClass("on")
+    scPlayer.bind(SC.Widget.Events.FINISH, function (n) {
+        $("[data-scplaycontrol=play]").removeClass("on");
+        $("[data-scplaycontrol=pause]").removeClass("on");
     });
-    c.bind(SC.Widget.Events.PLAY_PROGRESS, function(o) {
-        var p = Math.floor(o.relativePosition * 100);
-        var n = $(".info_play .bar_container").hasClass("hold");
-        if (!n) {
-            d(p)
+    scPlayer.bind(SC.Widget.Events.PLAY_PROGRESS, function (sc) {
+        var $scRelative = Math.floor(sc.relativePosition * 100);
+        var holdGesture = $(".scInfo .scBar").hasClass("hold");
+        if (!holdGesture) {
+            tick($scRelative);
         }
-    })
+    });
 });
