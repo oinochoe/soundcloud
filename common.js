@@ -1,207 +1,229 @@
-'use strict';
-$(document).ready(function () {
-    // Setting
-    function set(event, target) { 
-        function set(flags) {
-            tick(flags);
-            init(flags);
-        }
-        // Offset Initial Setting
-        var $offset = event.clientX - target.offset().left;
-        var $rangeWidth = parseInt($offset / target.width() * 100);
-        if ($rangeWidth < 0) {
-            set(0);
-        } else {
-            if ($rangeWidth > 100) {
-                set(100);
-            } else {
-                set($rangeWidth);
+window._abyss = window._abyss || {};
+window._abyss.gameinfo = (function (gameinfo, $) {
+    "use strict";
+
+    gameinfo.ostInit = function () {
+
+        // init setting
+        function init(e, ele) { 
+            function init(flags) {
+                ostTick(flags);
+                ostScroll(flags);
             }
-        }
-    }
-    // Init Scroll position and player Seeking to that position's playing
-    function init(scrollNum) {
-        scPlayer.getDuration(function ($makeWidth) {
-            var $scrollAmount = Math.floor($makeWidth * (scrollNum / 100));
-            scPlayer.seekTo($scrollAmount);
-        });
-    }
-    // Progress Tick setting
-    function tick(tickWidth) {
-        var $tick = $(".scInfo .scBar .scProgress");
-        var $tickController = $(".scInfo .scBar .scplaycontrol");
-        $tick.width(tickWidth + "%");
-        $tickController.css("left", tickWidth + "%");
-    }
-    // Thumbnail setting
-    function thumb(data) {
-        var $sc = $(".scPlayer");
-        var $scThumbElement = $sc.find(".scInfo .scThumb .thumb");
-        var $titleField = $sc.find(".scInfo .scThumbCont .scThumbDesc");
-        var $playTime = $sc.find(".scInfo .scPlaytime");
-        tick(0);
-        $sc.addClass("loading");
-        $scThumbElement.find("span").removeClass("on");
-        $scThumbElement.find("." + data.album).addClass("on");
-        $titleField.text(data.title);
-        $playTime.text(data.duration);
-        $(".scGroupBtn [data-volume]").addClass("on");
-    }
-    // ActivePlayer
-    function activePlayer(id, active) {
-        var $idxToMakeActive = id.parent().index();
-        $(active).removeClass("on");
-        $(active).eq($idxToMakeActive).addClass("on");
-    }
-    // OtherPlayer Class setting
-    function otherPlayer(other) {
-        var $idxToMakeOther = other.parent().index();
-        var $classesLine = "scplayMusic tab" + ($idxToMakeOther + 1);
-        $(".scplayMusic").attr("class", $classesLine);
-    }
-    // UpdatePlayer Sound
-    function updatePlayer(event) {
-        var $dataReceived = $(event.target);
-        scPlayer.getVolume(function (vols) {
-            var volumes = vols;
-            if (volumes > 0) {
-                scPlayer.setVolume(0);
-                $dataReceived.removeClass("on").text("?? off");
+            // Offset Initial Setting
+            var $offset = e.clientX - ele.offset().left;
+            var $rangeWidth = parseInt($offset / ele.width() * 100);
+            if ($rangeWidth < 0) {
+                init(0);
             } else {
-                scPlayer.setVolume(100);
-                $dataReceived.addClass("on").text("?? on");
-            }
-        });
-        event.preventDefault();
-    }
-    // Play Start
-    function start(event) {
-        var $state = $(event.target).data("scplaycontrol");
-        scPlayer.isPaused(function (table) {
-            var $that = table;
-            if ($that && $state == "play") {
-                scPlayer.play();
-            } else {
-                if (!$that && $state == "pause") {
-                    scPlayer.pause();
+                if ($rangeWidth > 100) {
+                    init(100);
+                } else {
+                    init($rangeWidth);
                 }
             }
-        });
-        event.preventDefault();
-    }
-    // Declare scPlayer variable
-    var scPlayer = SC.Widget($(".scMusicPlayer")[0]);
-    var json = {
-        auto_play: true,
-        buying: false,
-        sharing: false,
-        download: false,
-        show_artwork: false,
-        show_playcount: false,
-        show_user: false,
-        single_active: false,
-        start_track: 0
-    };
-    // Indexing Cache and 
-    var indexCache = function () {
-        var $allAttachPoints = {};
-        var $playerList = $(".scPlayer .scPlayList li");
-        $playerList.each(function (p, albumTarget) {
-            var $albumControl = $(albumTarget).find("a");
-            if (!$allAttachPoints[$albumControl.data("album")]) {
-                $allAttachPoints[$albumControl.data("album")] = [];
-            }
-            $allAttachPoints[$albumControl.data("album")].push({
-                title: $albumControl.text(),
-                duration: $albumControl.data("duration"),
-                album: $albumControl.data("album"),
-                url: $albumControl.data("url")
-            });
-        });
-        return $allAttachPoints;
-    }();
-    $(".scInfo .scBar").on({
-        mousedown: function (event) {
-            var $that = $(this);
-            set(event, $that);
-            $that.addClass("hold");
-            $that.on("mousemove", function (event) {
-                set(event, $that);
-                event.preventDefault();
-            });
-            event.preventDefault();
-        },
-        mouseup: function (event) {
-            var $that = $(this);
-            $that.removeClass("hold");
-            $that.off("mousemove");
-            event.preventDefault();
-        },
-        mouseleave: function (event) {
-            var $that = $(this);
-            $that.removeClass("hold");
-            $that.off("mousemove");
-            event.preventDefault();
         }
-    });
-    var $link = $("#fansiteTab");
-    $link.find(".scLink").on("click", function (event) {
-        var id = $(this);
-        $link.find("li").removeClass("on").find(".scLink").attr("aria-selected", "false");
-        id.parent().addClass("on").find(".scLink").attr("aria-selected", "true");
-        activePlayer(id, "[data-fansitekit]");
-        event.preventDefault();
-    });
-    $(".scPlayListTab").on("click", ".scLink", function (event) {
+
+        // scrooll Setting
+        function ostScroll(scrollNum) {
+            gameinfo.scPlayer.getDuration(function (scrollWidth) {
+                var $scrollAmount = Math.floor(scrollWidth * (scrollNum / 100));
+                gameinfo.scPlayer.seekTo($scrollAmount);
+            });
+        }
+
+        // Progress Tick setting
+        function ostTick(tickWidth) {
+            var tick = $(".scInfo .scBar .scProgress");
+            var tickController = $(".scInfo .scBar .scplaycontrol");
+            tick.width(tickWidth + "%");
+            tickController.css("left", tickWidth + "%");
+        }
+
+        // Declare scPlayer variable
+        gameinfo.scPlayer = SC.Widget($(".scMusicPlayer")[0]);
+        gameinfo.scPlayUtil = {
+            auto_play: true,
+            buying: false,
+            sharing: false,
+            download: false,
+            show_artwork: false,
+            show_playcount: false,
+            show_user: false,
+            single_active: false,
+            start_track: 0
+        };
+
+        // scBg Setting
+        gameinfo.scBg = function () {
+            var attachBg = {};
+            var playerList = $(".scPlayer .scPlayList li");
+            playerList.each(function (p, albumTarget) {
+                var $albumControl = $(albumTarget).find("a");
+                if (!attachBg[$albumControl.data("album")]) {
+                    attachBg[$albumControl.data("album")] = [];
+                }
+                attachBg[$albumControl.data("album")].push({
+                    title: $albumControl.text(),
+                    duration: $albumControl.data("duration"),
+                    album: $albumControl.data("album"),
+                    url: $albumControl.data("url")
+                });
+            });
+            return attachBg;
+        }();
+
+        // Player Info
+        gameinfo.ostInfo = function (data) {
+            var sc = $(".scPlayer");
+            var scTitle = sc.find(".scInfo .scThumbCont .scThumbDesc");
+            var scPlaytime = sc.find(".scInfo .scPlaytime");
+            ostTick(0);
+            sc.addClass("loading");
+            scTitle.text(data.title);
+            scPlaytime.text(data.duration);
+        }
+
+        // ActivePlayer -- Background is changed by click tab
+        gameinfo.activePlayer = function (e, act) {
+            var idxActive = e.parent().index();
+            $(act).removeClass("on");
+            $(act).eq(idxActive).addClass("on");
+        }
+
+        // OtherPlayer -- tab1, tab2, tab3 you can change tab's class via click
+        gameinfo.otherPlayer = function (others) {
+            var idxDisable = others.parent().index();
+            var tabClass = "scplayMusic tab" + (idxDisable + 1);
+            $(".scplayMusic").attr("class", tabClass);
+        }
+
+        // Playing
+        gameinfo.playing = function (e) {
+            var state = $(e.target).data("scplaycontrol");
+            gameinfo.scPlayer.isPaused(function (table) {
+                var $that = table;
+                if ($that && state == "play") {
+                    gameinfo.scPlayer.play();
+                } else {
+                    if (!$that && state == "pause") {
+                        gameinfo.scPlayer.pause();
+                    }
+                }
+            });
+            e.preventDefault();
+        }
+
+        // Widget Ready
+        gameinfo.scPlayer.bind(SC.Widget.Events.READY, function () {
+            gameinfo.ostInfo(gameinfo.scBg.balenos[0]);
+            $(".scPlayer").removeClass("loading");
+        });
+
+        // Widget Play
+        gameinfo.scPlayer.bind(SC.Widget.Events.PLAY, function (n) {
+            setTimeout(function () {
+                $(".scPlayer").removeClass("loading");
+            }, 1000);
+            $("[data-scplaycontrol=play]").addClass("on");
+            $("[data-scplaycontrol=pause]").removeClass("on");
+        });
+
+        // Widget Pause
+        gameinfo.scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
+            $("[data-scplaycontrol=play]").removeClass("on");
+            $("[data-scplaycontrol=pause]").addClass("on");
+        });
+
+        // Widget Finish
+        gameinfo.scPlayer.bind(SC.Widget.Events.FINISH, function (n) {
+            $("[data-scplaycontrol=play]").removeClass("on");
+            $("[data-scplaycontrol=pause]").removeClass("on");
+        });
+
+        // Widget Play Progress
+        gameinfo.scPlayer.bind(SC.Widget.Events.PLAY_PROGRESS, function (sc) {
+            var $scRelative = Math.floor(sc.relativePosition * 100);
+            var holdGesture = $(".scInfo .scBar").hasClass("hold");
+            if (!holdGesture) {
+                ostTick($scRelative);
+            }
+        });
+
+        // can move bar icon..
+        $(".scInfo .scBar").on({
+            mousedown: function (e) {
+                var $that = $(this);
+                init(e, $that);
+                $that.addClass("hold");
+                $that.on("mousemove", function (e) {
+                    init(e, $that);
+                    e.preventDefault();
+                });
+                e.preventDefault();
+            },
+            mouseup: function (e) {
+                var $that = $(this);
+                $that.removeClass("hold");
+                $that.off("mousemove");
+                e.preventDefault();
+            },
+            mouseleave: function (e) {
+                var $that = $(this);
+                $that.removeClass("hold");
+                $that.off("mousemove");
+                e.preventDefault();
+            }
+        });
+
+    }
+
+    // function
+    gameinfo.init = function () {
+        gameinfo.ostInit();
+    };
+
+
+    // when tab triggering you can change activePlayer.. -- core function
+    $(document).on("click", ".scPlayListTab .scLink", function (e) {
         var item = $(this);
         $(".scPlayListTab .scLink").attr("aria-selected", "false");
         item.attr("aria-selected", "true");
-        activePlayer(item, ".scPlayList");
-        otherPlayer(item);
-        event.preventDefault();
+        gameinfo.activePlayer(item, ".scPlayList");
+        gameinfo.otherPlayer(item);
+        e.preventDefault();
     });
-    $("[data-scplaycontrol]").click(start);
-    $(".scGroupBtn [data-volume]").click(updatePlayer);
-    $(".scPlayList li").find("a.scLinkTxt").on("click", function (event) {
-        var $btn = $(".scPlayer");
-        var $dataReceived = $(".scPlayer .scPlayList li");
+
+    // scplayer Controller
+    $(document).on("click", "[data-scplaycontrol]", function(e){
+        gameinfo.playing(e);
+    });
+
+    // Tab Clik Trigger..
+    $(document).on("click", ".scPlayList a.scLinkTxt", function (e) {
+        var scList = $(".scPlayer .scPlayList li");
         var prev = $(this).parent("li");
         var id = parseInt(prev.index());
-        var entry = indexCache[$(this).data("album")][id];
-        var $reload = !$btn.hasClass("loading") && !prev.hasClass("on");
-        if ($reload) {
-            scPlayer.pause();
-            scPlayer.load(entry.url, json);
-            thumb(entry);
-            $dataReceived.removeClass("on");
+        var entry = gameinfo.scBg[$(this).data("album")][id];
+        var reload = !prev.hasClass("on");
+        if (reload) {
+            gameinfo.scPlayer.pause();
+            gameinfo.scPlayer.load(entry.url, gameinfo.scPlayUtil);
+            gameinfo.ostInfo(entry);
+            scList.removeClass("on");
             prev.addClass("on");
         }
-        event.preventDefault();
+        e.preventDefault();
     });
-    scPlayer.bind(SC.Widget.Events.READY, function () {
-        thumb(indexCache.balenos[0]);
-        $(".scPlayer").removeClass("loading");
+
+    gameinfo.init();
+
+    return gameinfo;
+
+})(window._abyss.gameinfo || {}, jQuery);
+
+(function () {
+    $(document).ready(function () {
+        console.log('ready');
     });
-    scPlayer.bind(SC.Widget.Events.PLAY, function (n) {
-        setTimeout(function () {
-            $(".scPlayer").removeClass("loading");
-        }, 1000);
-        $("[data-scplaycontrol=play]").addClass("on");
-        $("[data-scplaycontrol=pause]").removeClass("on");
-    });
-    scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
-        $("[data-scplaycontrol=play]").removeClass("on");
-        $("[data-scplaycontrol=pause]").addClass("on");
-    });
-    scPlayer.bind(SC.Widget.Events.FINISH, function (n) {
-        $("[data-scplaycontrol=play]").removeClass("on");
-        $("[data-scplaycontrol=pause]").removeClass("on");
-    });
-    scPlayer.bind(SC.Widget.Events.PLAY_PROGRESS, function (sc) {
-        var $scRelative = Math.floor(sc.relativePosition * 100);
-        var holdGesture = $(".scInfo .scBar").hasClass("hold");
-        if (!holdGesture) {
-            tick($scRelative);
-        }
-    });
-});
+})();

@@ -1,4 +1,3 @@
-
 .scPlayer {
     display: none;
     padding-top: 33px
@@ -26,15 +25,15 @@
 }
 
 .scplayMusic.tab1 .bg_album {
-    background-image: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/bg_balenos.jpg)
+    background-image: url(../bg_balenos.jpg)
 }
 
 .scplayMusic.tab2 .bg_album {
-    background-image: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/bg_serendia.jpg)
+    background-image: url(../bg_serendia.jpg)
 }
 
 .scplayMusic.tab3 .bg_album {
-    background-image: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/bg_calpheon.jpg);
+    background-image: url(../bg_calpheon.jpg);
 }
 
 .scplayMusic .logo_sc {
@@ -166,7 +165,7 @@
     overflow: hidden;
     font-size: 0;
     line-height: 0;
-    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/ico_fansitekit.png) 0 0 no-repeat;
+    background: url(../ico_sprite.png) 0 0 no-repeat;
     text-indent: -9999px
 }
 
@@ -248,22 +247,6 @@
     display: block
 }
 
-.scInfo .scThumb .thumb span.balenos {
-    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/thumb_balenos.jpg) no-repeat
-}
-
-.scInfo .scThumb .thumb span.serendia {
-    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/thumb_serendia.jpg) no-repeat
-}
-
-.scInfo .scThumb .thumb span.calpheon {
-    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/thumb_calpheon.jpg) no-repeat
-}
-
-.scInfo .scThumb .loading {
-    background: url(http://t1.kakaocdn.net/gamepub/pub/blackobt/p/fansitekit/20180816/img-loading.gif) no-repeat;
-    z-index: 0
-}
 
 .scPlayer.loading .scInfo .player.loading .cover_image .cover {
     z-index: 0

@@ -6,15 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="style.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="api.js"></script>
-    <script src="common.js"></script>
+    
     <title>사운드 웨이브 테스트</title>
 </head>
 <body>
-    <div class="scPlayer on" data-fansitekit="tab1">
+    <ul class="scPlayListTab" role="tablist">
+        <li role="presentation">
+            <a href="javascript:void(0);" class="scLink" role="tab" aria-selected="true">발레노스</a>
+        </li>
+        <li role="presentation">
+            <a href="javascript:void(0);" class="scLink" role="tab" aria-selected="false">세렌디아</a>
+        </li>
+        <li role="presentation">
+            <a href="javascript:void(0);" class="scLink" role="tab" aria-selected="false">칼페온</a>
+        </li>
+    </ul>
+    <div class="scPlayer on" data-tab="tab1">
 
-        <div class="scplayMusic tab3" data-playlistbg="tab1">
+        <div class="scplayMusic tab1" data-playlistbg="tab1">
 
             <iframe class="scMusicPlayer" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/482773083"></iframe>
 
@@ -25,17 +34,6 @@
                 </a>
             </div>
             <div class="side_playlist">
-                <ul class="scPlayListTab" role="tablist">
-                    <li role="presentation">
-                        <a href="javascript:void(0);" class="scLink" role="tab" aria-selected="true">발레노스</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="javascript:void(0);" class="scLink" role="tab" aria-selected="false">세렌디아</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="javascript:void(0);" class="scLink" role="tab" aria-selected="false">칼페온</a>
-                    </li>
-                </ul>
                 <div class="scPlayList on">
                     <strong class="tit_playlist">
                         <span class="screen_out">발레노스 사운드 트랙</span>LIST
@@ -147,21 +145,11 @@
                 <div class="scGroupBtn">
                     <a href="javascript:void(0);" class="icoFansite icoPlay" data-scplaycontrol="play">재생하기</a>
                     <a href="javascript:void(0);" class="icoFansite icoPause" data-scplaycontrol="pause">정지하기</a>
-                    <a href="javascript:void(0);" class="icoFansite icoVol" data-volume="volume">볼륨 on</a><!-- 볼륨 on/off -->
                 </div>
             </div>
             <!-- // side_playlist -->
             <div class="scInfo">
-                <div class="scThumb">
-                    <span class="thumb">
-                        <span class="balenos on"></span>
-                        <span class="serendia"></span>
-                        <span class="calpheon"></span>
-                    </span>
-                    <span class="loading"></span>
-                </div>
                 <div class="scThumbCont">
-                    <strong class="tit_thumb">Black Desert Original Sound Selection</strong>
                     <p class="scThumbDesc"></p>
                 </div>
                 <div class="slider_music">
@@ -177,5 +165,8 @@
             <!-- // scInfo -->
         </div>
     </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="api.js"></script>
+    <script src="common.js"></script>
 </body>
 </html>
