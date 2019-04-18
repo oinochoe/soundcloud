@@ -194,6 +194,7 @@ window._abyss.gameinfo = (function (gameinfo, $) {
         e.preventDefault();
     });
 
+<<<<<<< HEAD
     // scplayer Controller
     $(document).on("click", "[data-scplaycontrol]", function(e){
         gameinfo.playing(e);
@@ -226,4 +227,57 @@ window._abyss.gameinfo = (function (gameinfo, $) {
     $(document).ready(function () {
         console.log('ready');
     });
+=======
+    $("[data-scplaycontrol]").click(start);
+
+    $(".scPlayList li").find("a.scLinkTxt").on("click", function (event) {
+        var $btn = $(".scPlayer");
+        var $dataReceived = $(".scPlayer .scPlayList li");
+        var prev = $(this).parent("li");
+        var id = parseInt(prev.index());
+        var entry = indexCache[$(this).data("album")][id];
+        var $reload = !$btn.hasClass("loading") && !prev.hasClass("on");
+        if ($reload) {
+            scPlayer.pause();
+            scPlayer.load(entry.url, scPlayerUtil);
+            $dataReceived.removeClass("on");
+            prev.addClass("on");
+        }
+        event.preventDefault();
+    });
+    scPlayer.bind(SC.Widget.Events.READY, function () {        
+        $(".scPlayer").removeClass("loading");
+    });
+    scPlayer.bind(SC.Widget.Events.PLAY, function (n) {
+        setTimeout(function () {
+            $(".scPlayer").removeClass("loading");
+        }, 1000);
+        $("[data-scplaycontrol=play]").addClass("on");
+        $("[data-scplaycontrol=pause]").removeClass("on");
+    });
+    scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
+        $("[data-scplaycontrol=play]").removeClass("on");
+        $("[data-scplaycontrol=pause]").addClass("on");
+    });
+    scPlayer.bind(SC.Widget.Events.FINISH, function (n) {
+        $("[data-scplaycontrol=play]").removeClass("on");
+        $("[data-scplaycontrol=pause]").removeClass("on");
+    });
+    scPlayer.bind(SC.Widget.Events.PLAY_PROGRESS, function (sc) {
+        var $scRelative = Math.floor(sc.relativePosition * 100);
+        var holdGesture = $(".scInfo .scBar").hasClass("hold");
+        if (!holdGesture) {
+            scBar($scRelative);
+        }
+    });
+
+    gameinfo.init();
+    return gameinfo;
+})(window._abyss.gameinfo || {}, jQuery);
+
+(function(){
+    $(document).ready(function() {
+        console.log('redady');
+    });
+>>>>>>> ed5b308a07fe27314a556c6521d7665db2b02a05
 })();
