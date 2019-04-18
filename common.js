@@ -76,7 +76,7 @@ window._abyss.gameinfo = (function (gameinfo, $) {
         // Player Info
         gameinfo.ostInfo = function (data) {
             var sc = $(".scPlayer");
-            var scTitle = sc.find(".scInfo .scThumbCont .scThumbDesc");
+            var scTitle = sc.find(".scInfo .scInfoCont .scInfoTitle");
             var scPlaytime = sc.find(".scInfo .scPlaytime");
             ostTick(0);
             sc.addClass("loading");
@@ -125,19 +125,19 @@ window._abyss.gameinfo = (function (gameinfo, $) {
             setTimeout(function () {
                 $(".scPlayer").removeClass("loading");
             }, 1000);
-            $("[data-scplaycontrol=play]").addClass("on");
-            $("[data-scplaycontrol=pause]").removeClass("on");
-        });
-
-        // Widget Pause
-        gameinfo.scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
             $("[data-scplaycontrol=play]").removeClass("on");
             $("[data-scplaycontrol=pause]").addClass("on");
         });
 
+        // Widget Pause
+        gameinfo.scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
+            $("[data-scplaycontrol=play]").addClass("on");
+            $("[data-scplaycontrol=pause]").removeClass("on");
+        });
+
         // Widget Finish
         gameinfo.scPlayer.bind(SC.Widget.Events.FINISH, function (n) {
-            $("[data-scplaycontrol=play]").removeClass("on");
+            $("[data-scplaycontrol=play]").addClass("on");
             $("[data-scplaycontrol=pause]").removeClass("on");
         });
 

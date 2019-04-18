@@ -1,6 +1,22 @@
+
+.scPlayListTab {
+    position:relative;
+}
+
+.scPlayListTab .scLink:hover {
+    color: red;
+}
+
+.scPlayListTab .scLink[aria-selected="true"] {
+    color: red;
+}
+
 .scPlayer {
     display: none;
-    padding-top: 33px
+    position:relative;
+    max-width:1000px;
+    margin: 0 auto;
+    padding: 10px 0;
 }
 
 .scPlayer.on {
@@ -10,310 +26,191 @@
 .scplayMusic {
     overflow: hidden;
     position: relative;
-    width: 848px;
-    height: 598px;
-    border: 1px solid #e6e6e6
+    width:100%;
+    height: 490px;
 }
 
-.scplayMusic .bg_album {
+.scplayMusic .scBg{
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:2;
+    width:100%;
+    height:100%;
+    padding:10px 0 10px 10px; 
+    box-sizing:border-box;
+}
+.scplayMusic .scBg:before{
+    content:'';
+    display:block;
+    width:100%;
+    height:100%;
+    border:1px solid rgba(255,255,255,.4);
+}
+.scplayMusic .scPlayListWrap .scBg{ padding:10px 10px 10px 0; }
+.scplayMusic .scPlayListWrap .scBg:before {border-color:rgba(213,213,213,.4)}
+
+
+.scplayMusic .bgAlbum {
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
+    width: 50%;
     height: 100%;
-    z-index: 1
+    z-index: 1;
+    background-repeat: no-repeat;
 }
 
-.scplayMusic.tab1 .bg_album {
-    background-image: url(../bg_balenos.jpg)
+.scplayMusic.tab1 .bgAlbum {
+    background-image: url(./img/portal/gaminfo/gameinfo_soundtrack_bg_balenos.jpg)
 }
 
-.scplayMusic.tab2 .bg_album {
-    background-image: url(../bg_serendia.jpg)
+.scplayMusic.tab2 .bgAlbum {
+    background-image: url(./img/portal/gaminfo/gameinfo_soundtrack_bg_serendia.jpg)
 }
 
-.scplayMusic.tab3 .bg_album {
-    background-image: url(../bg_calpheon.jpg);
+.scplayMusic.tab3 .bgAlbum {
+    background-image: url(./img/portal/gaminfo/gameinfo_soundtrack_bg_calpheon.jpg);
 }
 
-.scplayMusic .logo_sc {
+.scplayMusic .scLogo {
     position: absolute;
-    left: 17px;
-    top: 17px;
-    width: 104px;
-    height: 26px;
-    z-index: 2
-}
-
-.scplayMusic .logo_sc img {
-    width: 100%;
-    height: auto
+    left: 24px;
+    top: 24px;
+    z-index: 2;
 }
 
 .scplayMusic .scMusicPlayer {
     position: absolute;
     left: 0;
-    top: -200px
+    top: -999999px;
+    overflow:hidden;
 }
 
-.side_playlist {
+.scPlayListWrap {
     position: absolute;
     top: 0;
     right: 0;
-    width: 285px;
+    width: 50%;
+    max-width:500px;
     height: 100%;
-    padding: 19px 17px 60px 18px;
-    background-color: #000;
-    background-color: rgba(0,0,0,.62);
-    box-sizing: border-box
-}
-
-.scPlayListTab {
-    overflow: hidden;
-    padding: 1px 0 0 1px
-}
-
-.scPlayListTab li {
-    float: left;
-    margin: -1px 0 0 -1px
-}
-
-.scPlayListTab .scLink {
-    float: left;
-    width: 83px;
-    height: 38px;
-    padding-top: 9px;
-    border: 1px solid #fff;
-    border: 1px solid rgba(255,255,255,.2);
-    font-size: 13px;
-    line-height: 15px;
-    color: #f5f5f5;
+    padding: 30px 40px;
     box-sizing: border-box;
-    text-align: center;
-    text-decoration: none
+    background-color: #fbfbfb;
 }
 
-.scPlayListTab .scLink:hover {
-    color: #ffc741
-}
 
-.scPlayListTab .scLink[aria-selected="true"] {
+.scInfo {
     position: relative;
-    z-index: 10;
-    color: #ffc741;
-    border-color: #ffc741
+    z-index: 4
+}
+
+.scInfo .scInfoCont {
+    display:flex;
+    align-items: center;
+    font-size: 0;
+    overflow: hidden;
+    text-align: left;
+}
+
+.scInfo .scGroupBtn {
+    display:inline-block; min-width:44px;  height:44px; vertical-align: middle; position:relative;
+}
+
+.scInfo .scGroupBtn a{
+    display:none; position:absolute; left:0; top:0; width:100%; height:100%; background:url('./img/portal/gaminfo/gameinfo_soundtrack_play.png') no-repeat;
+}
+.scInfo .scGroupBtn a.icoBtnGroup.on {display:block;}
+
+
+.scInfo .scInfoTitle {display:inline-block; vertical-align: middle; font-size:17px; font-weight:500; letter-spacing: -.2px; color:#000; padding-left:22px;}
+
+.scInfo .scGroupBtn .icoPause {
+    background-image:url('./img/portal/gaminfo/gameinfo_soundtrack_stop.png')
+}
+
+.scInfo .scPlayerSlide {
+    position:relative;
+    margin-top:15px;
+}
+
+.scInfo .scPlayerSlideCont {
+    height: 2px;
+    background-color: #d5d5d5;
+}
+
+.scInfo .scProgress {
+    height: 100%;
+    background-color: #000;
+}
+.scInfo .scBar{
+    position: relative;
+    padding:5px 0;
+    cursor: pointer;
+}
+
+.scInfo .scplaycontrol {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin: -5px 0 0 -5px;
+    background:url('./img/portal/gaminfo/gameinfo_soundtrack_tick.png') no-repeat;
+}
+
+.scInfo .scPlaytime {
+    position: absolute;
+    right:0;
+    bottom:14px;
+    font-size: 12px;
+    font-weight:100;
+    color:#000;
 }
 
 .scPlayList {
-    display: none
+    display: none;
+    position:relative;
+    z-index:4;
+    text-align: left;
 }
 
 .scPlayList.on {
     display: block
 }
 
-.scPlayList .tit_playlist {
-    display: block;
-    height: 54px;
-    padding-top: 24px;
-    border-bottom: 1px solid #d3d2d2;
-    border-bottom: 1px solid rgba(211,210,210,.3);
-    font-size: 14px;
-    line-height: 16px;
-    color: #fff;
-    text-indent: 5px;
-    box-sizing: border-box
+.scPlayList .scPlayListTitle {
+    display:none;
 }
 
-.list_playlist {
-    padding: 7px 0 0 5px
+.scList {
+    padding:16px 0 0 0;
 }
 
-.list_playlist .on .scLinkTxt,.list_playlist .scLinkTxt:hover {
-    font-weight: bold;
-    color: #ffc741
+.scList li ~ li {margin-top:10px;}
+
+.scList .scLinkTxt {
+    display:block;
+    font-size:14px;
+    color:#000;
+    font-weight:bold;
 }
 
-.list_playlist .scLinkTxt {
-    display: inline-block;
-    overflow: hidden;
-    max-width: 100%;
-    font-size: 13px;
-    line-height: 25px;
-    color: #f5f5f5;
-    text-decoration: none;
-    letter-spacing: -0.025em;
-    vertical-align: top;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    cursor: pointer
+.scList .on .scLinkTxt {color:#2e3b7d;}
+
+@media screen and (min-width:1025px) {
+    .scList .scLinkTxt:hover{color:#2e3b7d;}
 }
 
-.side_playlist {
-    z-index: 2
-}
-
-.side_playlist .scGroupBtn {
-    position: absolute;
-    bottom: 25px;
-    left: 22px;
-    right: 22px
-}
-
-.icoFansite {
-    display: block;
-    overflow: hidden;
-    font-size: 0;
-    line-height: 0;
-    background: url(../ico_sprite.png) 0 0 no-repeat;
-    text-indent: -9999px
-}
-
-.scGroupBtn {
-    overflow: hidden
-}
-
-.scGroupBtn .icoFansite {
-    width: 28px;
-    height: 28px
-}
-
-.scGroupBtn .icoFansite.on {
-    background-position-y: -30px
-}
-
-.scGroupBtn .icoPlay {
-    float: left;
-    background-position: 0 0
-}
-
-.scGroupBtn .icoPause {
-    float: left;
-    margin-left: 8px;
-    background-position: -30px 0
-}
-
-.scGroupBtn .icoVol {
-    float: right;
-    background-position: -60px 0
-}
-
-.scInfo {
-    position: absolute;
-    bottom: 17px;
-    left: 17px;
-    width: 546px;
-    box-sizing: border-box;
-    z-index: 2
-}
-
-.scInfo:after {
-    display: block;
-    clear: both;
-    content: ''
-}
-
-.scInfo .scThumb {
-    float: left;
-    position: relative;
-    width: 80px;
-    height: 80px
-}
-
-.scInfo .scThumb .thumb,.scInfo .scThumb .loading {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%
-}
-
-.scInfo .scThumb .thumb img,.scInfo .scThumb .loading img {
-    width: 100%;
-    height: auto
-}
-
-.scInfo .scThumb .thumb {
-    z-index: 1
-}
-
-.scInfo .scThumb .thumb span {
-    display: none;
-    width: 100%;
-    height: 100%
-}
-
-.scInfo .scThumb .thumb span.on {
-    display: block
-}
-
-
-.scPlayer.loading .scInfo .player.loading .cover_image .cover {
-    z-index: 0
-}
-
-.scPlayer.loading .scInfo .scThumb .loading {
-    z-index: 1
-}
-
-.scInfo .scThumbCont {
-    overflow: hidden;
-    padding-left: 19px
-}
-
-.scInfo .tit_thumb {
-    display: block;
-    padding-top: 8px;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 18px;
-    color: #fff
-}
-
-.scInfo .scThumbDesc {
-    padding-top: 5px;
-    font-size: 14px;
-    color: #ffc741
-}
-
-.scInfo .slider_music {
-    position: absolute;
-    bottom: -4px;
-    left: 98px;
-    right: 0;
-    padding-right: 54px
-}
-
-.scInfo .scBar {
-    position: relative;
-    padding: 5px 0;
-    cursor: pointer
-}
-
-.scInfo .inner_container {
-    height: 2px;
-    background-color: #8c8c8c
-}
-
-.scInfo .scProgress {
-    height: 100%;
-    background-color: #ffc741
-}
-
-.scInfo .scplaycontrol {
-    position: absolute;
-    top: 50%;
-    width: 10px;
-    height: 10px;
-    margin: -5px 0 0 -5px;
-    background-position: -90px 0
-}
-
-.scInfo .scPlaytime {
-    position: absolute;
-    right: 18px;
-    bottom: 2px;
-    font-size: 13px;
-    line-height: 15px;
-    color: #d3d3d3
+@media screen and (max-width:1024px) {
+    .scPlayer{padding:0;}
+    .scplayMusic {height:auto;}
+    .scplayMusic .scBg{display:none;}
+    .scplayMusic .bgAlbum {width:100%; background-size: cover; background-position: right bottom;}
+    .scplayMusic.tab1 .bgAlbum {background-image:url('./img/portal/gaminfo/gameinfo_soundtrack_bg_balenos_m.jpg');}
+    .scplayMusic.tab2 .bgAlbum {background-image:url('./img/portal/gaminfo/gameinfo_soundtrack_bg_serendia_m.jpg');}
+    .scplayMusic.tab3 .bgAlbum {background-image:url('./img/portal/gaminfo/gameinfo_soundtrack_bg_calpheon_m.jpg');}
+    .scplayMusic .scLogo {left:auto; top:auto; bottom:1rem; right:1rem;}
+    .scplayMusic .scLogo a{display: block; height:16px;}
+    .scplayMusic .scMusicPlayer {position:absolute; left:0; top: -99999px; overflow:hidden; }
+    .scPlayListWrap {position:static; width:100%; max-width:100%; padding:1.41rem 2rem 8.75rem; background:transparent;}
 }

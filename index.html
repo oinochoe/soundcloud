@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="style.css">
-    
+
     <title>사운드 웨이브 테스트</title>
 </head>
 <body>
@@ -27,18 +27,39 @@
 
             <iframe class="scMusicPlayer" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/482773083"></iframe>
 
-            <div class="bg_album"></div>
-            <div class="logo_sc">
+            <div class="bgAlbum">
+                <div class="scBg"></div>
+            </div>
+
+            <div class="scLogo">
                 <a href="http://soundcloud.com/" target="_blank">
                     <img src="https://developers.soundcloud.com/assets/logo_black-8c4cb46bf63fda8936f9a4d967416dc6.png" alt="SoundCloud">
                 </a>
             </div>
-            <div class="side_playlist">
+
+            <div class="scPlayListWrap">
+                <div class="scBg"></div>
+                <div class="scInfo">
+                    <div class="scInfoCont">
+                        <div class="scGroupBtn">
+                            <a href="javascript:void(0);" class="icoBtnGroup icoPlay on" data-scplaycontrol="play">재생하기</a>
+                            <a href="javascript:void(0);" class="icoBtnGroup icoPause" data-scplaycontrol="pause">정지하기</a>
+                        </div>
+                        <strong class="scInfoTitle">Black Desert Sound Track</strong>
+                    </div>
+                    <div class="scPlayerSlide">
+                        <div class="scBar">
+                            <div class="scPlayerSlideCont">
+                                <div class="scProgress"></div>
+                                <a href="javascript:void(0);" class="icoBtnGroup scplaycontrol"></a>
+                            </div>
+                        </div>
+                        <div class="scPlaytime"></div>
+                    </div>
+                </div>
                 <div class="scPlayList on">
-                    <strong class="tit_playlist">
-                        <span class="screen_out">발레노스 사운드 트랙</span>LIST
-                    </strong>
-                    <ul class="list_playlist">
+                    <strong class="scPlayListTitle">발레노스 사운드 트랙</strong>
+                    <ul class="scList">
                         <li class="on">
                             <a class="scLinkTxt" data-album="balenos" data-duration="4:20" data-url="https://soundcloud.com/pearlabyss/i-balenos-overture?in=pearlabyss/sets/black-desert-original-soundtrack-i-balenos">I. Balenos - Overture</a>
                         </li>
@@ -64,10 +85,8 @@
                 </div>
                 <!-- // scPlayList -->
                 <div class="scPlayList">
-                    <strong class="tit_playlist">
-                        <span class="screen_out">세렌디아 사운드 트랙</span>LIST
-                    </strong>
-                    <ul class="list_playlist">
+                    <strong class="scPlayListTitle">세렌디아 사운드 트랙</strong>
+                    <ul class="scList">
                         <li>
                             <a class="scLinkTxt" data-album="serendia" data-duration="3:44" data-url="https://soundcloud.com/pearlabyss/ii-serendia-overture?in=pearlabyss/sets/black-desert-original-soundtrack-ii-serendia">II. Serendia – Overture</a>
                         </li>
@@ -96,10 +115,8 @@
                 </div>
                 <!-- // scPlayList -->
                 <div class="scPlayList">
-                    <strong class="tit_playlist">
-                        <span class="screen_out">칼페온 사운드 트랙</span>LIST
-                    </strong>
-                    <ul class="list_playlist">
+                    <strong class="scPlayListTitle">칼페온 사운드 트랙</strong>
+                    <ul class="scList">
                         <li>
                             <a class="scLinkTxt" data-album="calpheon" data-duration="4:30" data-url="https://soundcloud.com/pearlabyss/iii-calpheon-overture?in=pearlabyss/sets/black-desert-original-soundtrack-iii-calpheon">III. Calpheon - Overture</a>
                         </li>
@@ -142,27 +159,8 @@
                     </ul>
                 </div>
                 <!-- // scPlayList -->
-                <div class="scGroupBtn">
-                    <a href="javascript:void(0);" class="icoFansite icoPlay" data-scplaycontrol="play">재생하기</a>
-                    <a href="javascript:void(0);" class="icoFansite icoPause" data-scplaycontrol="pause">정지하기</a>
-                </div>
             </div>
-            <!-- // side_playlist -->
-            <div class="scInfo">
-                <div class="scThumbCont">
-                    <p class="scThumbDesc"></p>
-                </div>
-                <div class="slider_music">
-                    <div class="scBar">
-                        <div class="inner_container">
-                            <div class="scProgress"></div>
-                            <a href="javascript:void(0);" class="icoFansite scplaycontrol"></a>
-                        </div>
-                    </div>
-                    <div class="scPlaytime"></div>
-                </div>
-            </div>
-            <!-- // scInfo -->
+            <!-- // scPlayListWrap -->
         </div>
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
