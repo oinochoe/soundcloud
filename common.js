@@ -2,6 +2,20 @@ window._abyss = window._abyss || {};
 window._abyss.gameinfo = (function (gameinfo, $) {
     "use strict";
 
+    // Declare scPlayer variable
+    var scPlayer = SC.Widget($(".scMusicPlayer")[0]);
+    var scPlayUtil = {
+        auto_play: true,
+        buying: false,
+        sharing: false,
+        download: false,
+        show_artwork: false,
+        show_playcount: false,
+        show_user: false,
+        single_active: false,
+        start_track: 0
+    };
+
     gameinfo.ostInit = function () {
 
         // init setting
@@ -26,9 +40,9 @@ window._abyss.gameinfo = (function (gameinfo, $) {
 
         // scrooll Setting
         function ostScroll(scrollNum) {
-            gameinfo.scPlayer.getDuration(function (scrollWidth) {
+            scPlayer.getDuration(function (scrollWidth) {
                 var $scrollAmount = Math.floor(scrollWidth * (scrollNum / 100));
-                gameinfo.scPlayer.seekTo($scrollAmount);
+                scPlayer.seekTo($scrollAmount);
             });
         }
 
@@ -40,22 +54,8 @@ window._abyss.gameinfo = (function (gameinfo, $) {
             tickController.css("left", tickWidth + "%");
         }
 
-        // Declare scPlayer variable
-        gameinfo.scPlayer = SC.Widget($(".scMusicPlayer")[0]);
-        gameinfo.scPlayUtil = {
-            auto_play: true,
-            buying: false,
-            sharing: false,
-            download: false,
-            show_artwork: false,
-            show_playcount: false,
-            show_user: false,
-            single_active: false,
-            start_track: 0
-        };
-
         // scBg Setting
-        gameinfo.scBg = function () {
+        var scBg = function () {
             var attachBg = {};
             var playerList = $(".scPlayer .scPlayList li");
             playerList.each(function (p, albumTarget) {
@@ -74,7 +74,7 @@ window._abyss.gameinfo = (function (gameinfo, $) {
         }();
 
         // Player Info
-        gameinfo.ostInfo = function (data) {
+        var ostInfo = function (data) {
             var sc = $(".scPlayer");
             var scTitle = sc.find(".scInfo .scInfoCont .scInfoTitle");
             var scPlaytime = sc.find(".scInfo .scPlaytime");
@@ -85,43 +85,27 @@ window._abyss.gameinfo = (function (gameinfo, $) {
         }
 
         // ActivePlayer -- Background is changed by click tab
-        gameinfo.activePlayer = function (e, act) {
+        var activePlayer = function (e, act) {
             var idxActive = e.parent().index();
             $(act).removeClass("on");
             $(act).eq(idxActive).addClass("on");
         }
 
         // OtherPlayer -- tab1, tab2, tab3 you can change tab's class via click
-        gameinfo.otherPlayer = function (others) {
+        var otherPlayer = function (others) {
             var idxDisable = others.parent().index();
             var tabClass = "scplayMusic tab" + (idxDisable + 1);
             $(".scplayMusic").attr("class", tabClass);
         }
 
-        // Playing
-        gameinfo.playing = function (e) {
-            var state = $(e.target).data("scplaycontrol");
-            gameinfo.scPlayer.isPaused(function (table) {
-                var $that = table;
-                if ($that && state == "play") {
-                    gameinfo.scPlayer.play();
-                } else {
-                    if (!$that && state == "pause") {
-                        gameinfo.scPlayer.pause();
-                    }
-                }
-            });
-            e.preventDefault();
-        }
-
         // Widget Ready
-        gameinfo.scPlayer.bind(SC.Widget.Events.READY, function () {
-            gameinfo.ostInfo(gameinfo.scBg.balenos[0]);
+        scPlayer.bind(SC.Widget.Events.READY, function () {
+            ostInfo(scBg.balenos[0]);
             $(".scPlayer").removeClass("loading");
         });
 
         // Widget Play
-        gameinfo.scPlayer.bind(SC.Widget.Events.PLAY, function (n) {
+        scPlayer.bind(SC.Widget.Events.PLAY, function (n) {
             setTimeout(function () {
                 $(".scPlayer").removeClass("loading");
             }, 1000);
@@ -130,19 +114,19 @@ window._abyss.gameinfo = (function (gameinfo, $) {
         });
 
         // Widget Pause
-        gameinfo.scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
+        scPlayer.bind(SC.Widget.Events.PAUSE, function (n) {
             $("[data-scplaycontrol=play]").addClass("on");
             $("[data-scplaycontrol=pause]").removeClass("on");
         });
 
         // Widget Finish
-        gameinfo.scPlayer.bind(SC.Widget.Events.FINISH, function (n) {
+        scPlayer.bind(SC.Widget.Events.FINISH, function (n) {
             $("[data-scplaycontrol=play]").addClass("on");
             $("[data-scplaycontrol=pause]").removeClass("on");
         });
 
         // Widget Play Progress
-        gameinfo.scPlayer.bind(SC.Widget.Events.PLAY_PROGRESS, function (sc) {
+        scPlayer.bind(SC.Widget.Events.PLAY_PROGRESS, function (sc) {
             var $scRelative = Math.floor(sc.relativePosition * 100);
             var holdGesture = $(".scInfo .scBar").hasClass("hold");
             if (!holdGesture) {
@@ -176,45 +160,59 @@ window._abyss.gameinfo = (function (gameinfo, $) {
             }
         });
 
+        // when tab triggering you can change activePlayer.. -- core function
+        $(document).on("click", ".scPlayListTab .scLink", function (e) {
+            var item = $(this);
+            $(".scPlayListTab .scLink").attr("aria-selected", "false");
+            item.attr("aria-selected", "true");
+            activePlayer(item, ".scPlayList");
+            otherPlayer(item);
+            e.preventDefault();
+        });
+
+        // scplayer Controller
+        $(document).on("click", "[data-scplaycontrol]", function(e){
+            gameinfo.play(e);
+        });
+
+        // Tab Clik Trigger..
+        $(document).on("click", ".scPlayList a.scLinkTxt", function (e) {
+            var scList = $(".scPlayer .scPlayList li");
+            var prev = $(this).parent("li");
+            var id = parseInt(prev.index());
+            var entry = scBg[$(this).data("album")][id];
+            var reload = !prev.hasClass("on");
+            if (reload) {
+                scPlayer.pause();
+                scPlayer.load(entry.url, scPlayUtil);
+                ostInfo(entry);
+                scList.removeClass("on");
+                prev.addClass("on");
+            }
+            e.preventDefault();
+        });
+
+    }
+
+    gameinfo.play = function (e) {
+        var state = $(e.target).data("scplaycontrol");
+        scPlayer.isPaused(function (table) {
+            var $that = table;
+            if ($that && state == "play") {
+                scPlayer.play();
+            } else {
+                if (!$that && state == "pause") {
+                    scPlayer.pause();
+                }
+            }
+        });
+        e.preventDefault();
     }
 
     // function
     gameinfo.init = function () {
         gameinfo.ostInit();
     };
-
-
-    // when tab triggering you can change activePlayer.. -- core function
-    $(document).on("click", ".scPlayListTab .scLink", function (e) {
-        var item = $(this);
-        $(".scPlayListTab .scLink").attr("aria-selected", "false");
-        item.attr("aria-selected", "true");
-        gameinfo.activePlayer(item, ".scPlayList");
-        gameinfo.otherPlayer(item);
-        e.preventDefault();
-    });
-
-    // scplayer Controller
-    $(document).on("click", "[data-scplaycontrol]", function(e){
-        gameinfo.playing(e);
-    });
-
-    // Tab Clik Trigger..
-    $(document).on("click", ".scPlayList a.scLinkTxt", function (e) {
-        var scList = $(".scPlayer .scPlayList li");
-        var prev = $(this).parent("li");
-        var id = parseInt(prev.index());
-        var entry = gameinfo.scBg[$(this).data("album")][id];
-        var reload = !prev.hasClass("on");
-        if (reload) {
-            gameinfo.scPlayer.pause();
-            gameinfo.scPlayer.load(entry.url, gameinfo.scPlayUtil);
-            gameinfo.ostInfo(entry);
-            scList.removeClass("on");
-            prev.addClass("on");
-        }
-        e.preventDefault();
-    });
 
     gameinfo.init();
 
